@@ -1,7 +1,7 @@
 import abc
 
 
-class LightControllerRegister(type):
+class LightControllerRegistry(type):
 
     REGISTRY = {}
 
@@ -12,12 +12,13 @@ class LightControllerRegister(type):
             @param attrs: Attributes defined for the class
         """
         new_cls = type.__new__(cls, name, bases, attrs)
-        cls.REGISTRY[name] = new_cls
+        if name != 'LightController':
+            cls.REGISTRY[name] = new_cls
         return new_cls
 
 
 class LightController(object):
-    __metaclass__ = LightControllerRegister
+    __metaclass__ = LightControllerRegistry
 
     def __init__(self, *args, **kwargs):
         pass
@@ -36,4 +37,4 @@ class LightController(object):
 
 
 def get_controller_class(product_name):
-    return LightControllerRegister.REGISTRY.get(product_name.lower())
+    return LightControllerRegistry.REGISTRY.get(product_name.lower())
