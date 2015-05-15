@@ -11,7 +11,8 @@ manager = Manager(app)
 
 def _make_shell_context():
     return dict(LightControllerRegistry=LightControllerRegistry,
-                MiLightController=MiLightController)
+                MiLightController=MiLightController,
+                app=app)
 
 manager.add_command("shell", Shell(make_context=_make_shell_context))
 
