@@ -13,11 +13,21 @@ class LightControllerRegistry(type):
         """
         new_cls = type.__new__(cls, name, bases, attrs)
         if name != 'LightController':
-            cls.REGISTRY[name] = new_cls
+            vendor = attrs.get('VENDOR')
+            cls.REGISTRY[(name, vendor)] = new_cls
         return new_cls
+
+    @classmethod
+    def get_controller_class(cls, vendor):
+        for kls_name, v in cls.REGISTRY:
+            if v and v.lower() == vendor.lower():
+                return cls.REGISTRY[(kls_name, v)]
 
 
 class LightController(object):
+
+    VENDOR = None
+
     __metaclass__ = LightControllerRegistry
 
     def __init__(self, *args, **kwargs):
@@ -34,7 +44,3 @@ class LightController(object):
     @abc.abstractmethod
     def change_color(self, light_id, color, *args, **kwargs):
         pass
-
-
-def get_controller_class(product_name):
-    return LightControllerRegistry.REGISTRY.get(product_name.lower())
