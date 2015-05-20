@@ -18,7 +18,9 @@ def create_app(deploy_type="default"):
                                         config_o.LIGHT_PORT,
                                         config_o.LIGHT_OPTS])
 
-    from api import api as api_blueprint
+    from blueprints.api import api as api_blueprint
+    from blueprints.ui import ui as ui_blueprint
     app.register_blueprint(api_blueprint, url_prefix="/api")
+    app.register_blueprint(ui_blueprint)
 
     return app
